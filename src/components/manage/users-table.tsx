@@ -57,6 +57,9 @@ export function UsersTable() {
   const [sortKey, setSortKey] = useState<SortKey>("dateCreated");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [exportOpen, setExportOpen] = useState(false);
+  const [activityExportOpen, setActivityExportOpen] = useState(false);
+  const [activityExportType, setActivityExportType] = useState<"breakdown" | "all">("breakdown");
+  const [activityReportName, setActivityReportName] = useState("");
 
   const sorted = [...MOCK_USERS].sort((a, b) => {
     let cmp = 0;
@@ -147,7 +150,7 @@ export function UsersTable() {
             <DropdownMenuItem className="text-sm gap-2" onClick={() => setExportOpen(true)}>
               <FileDown className="w-3.5 h-3.5" /> Export Profile Data
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-sm gap-2" onClick={() => setExportOpen(true)}>
+            <DropdownMenuItem className="text-sm gap-2" onClick={() => { setActivityExportType("breakdown"); setActivityReportName(""); setActivityExportOpen(true); }}>
               <FileDown className="w-3.5 h-3.5" /> Export Application Activity
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -317,10 +320,10 @@ export function UsersTable() {
       <Dialog open={exportOpen} onOpenChange={setExportOpen}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
-            <DialogTitle>Export</DialogTitle>
+            <DialogTitle>Export Profile Data</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col gap-2">
-            <label style={{ fontSize: "12px", color: "#576B85" }}>Report name</label>
+            <label style={{ fontSize: "12px", color: "#576B85" }}>Report Name</label>
             <input
               type="text"
               placeholder="My report"
@@ -334,8 +337,104 @@ export function UsersTable() {
             />
           </div>
           <DialogFooter className="gap-2">
-            <Button variant="outline" size="sm" onClick={() => setExportOpen(false)}>Cancel</Button>
-            <Button size="sm" onClick={() => setExportOpen(false)}>Create report</Button>
+            <Button variant="outline" size="sm" className="rounded-full" onClick={() => setExportOpen(false)}>Cancel</Button>
+            <Button size="sm" className="rounded-full" onClick={() => setExportOpen(false)}>Create Report</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Export Application Activity Modal ─────────────────── */}
+      <Dialog open={activityExportOpen} onOpenChange={setActivityExportOpen}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Export Application Activity</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-4">
+
+            {/* Selected users chip — only shown when 1+ selected */}
+            {selected.size > 0 && (
+              <div>
+                <span
+                  style={{
+                    display: "inline-block",
+                    background: "#f4ecfe",
+                    color: "#6B11F9",
+                    borderRadius: "9999px",
+                    padding: "4px 12px",
+                    fontSize: "13px",
+                    fontWeight: 500,
+                  }}
+                >
+                  {selected.size} {selected.size === 1 ? "user" : "users"} selected
+                </span>
+              </div>
+            )}
+
+            {/* Radio options */}
+            <div className="flex flex-col gap-3">
+              {/* Breakdown by User */}
+              <label
+                className="flex items-center gap-3"
+                style={{ cursor: selected.size >= 1 ? "pointer" : "not-allowed", opacity: selected.size >= 1 ? 1 : 0.45 }}
+              >
+                <input
+                  type="radio"
+                  name="activityExportType"
+                  value="breakdown"
+                  checked={activityExportType === "breakdown"}
+                  onChange={() => setActivityExportType("breakdown")}
+                  disabled={selected.size < 1}
+                  style={{ accentColor: "#6B11F9", flexShrink: 0 }}
+                />
+                <span style={{ fontSize: "14px", fontWeight: 500, color: "#000000" }}>Breakdown by User</span>
+              </label>
+
+              {/* All Applications Across Selected Users */}
+              <div style={{ opacity: selected.size >= 2 ? 1 : 0.45 }}>
+                <label
+                  className="flex items-center gap-3"
+                  style={{ cursor: selected.size >= 2 ? "pointer" : "not-allowed" }}
+                >
+                  <input
+                    type="radio"
+                    name="activityExportType"
+                    value="all"
+                    checked={activityExportType === "all"}
+                    onChange={() => setActivityExportType("all")}
+                    disabled={selected.size < 2}
+                    style={{ accentColor: "#6B11F9", flexShrink: 0 }}
+                  />
+                  <span style={{ fontSize: "14px", fontWeight: 500, color: "#000000" }}>All Applications Across Selected Users</span>
+                </label>
+                {selected.size < 2 && (
+                  <span style={{ fontSize: "12px", color: "#8687A8", paddingLeft: "25px", display: "block", marginTop: "2px" }}>Select multiple users to enable</span>
+                )}
+              </div>
+            </div>
+
+            {/* Report Name */}
+            <div className="flex flex-col gap-1">
+              <label style={{ fontSize: "12px", fontWeight: 500, color: "#576B85" }}>Report Name</label>
+              <input
+                type="text"
+                placeholder="My report"
+                value={activityReportName}
+                onChange={(e) => setActivityReportName(e.target.value)}
+                style={{
+                  border: "1px solid #C9CBE3",
+                  borderRadius: "6px",
+                  padding: "8px 12px",
+                  fontSize: "14px",
+                  outline: "none",
+                  width: "100%",
+                }}
+              />
+            </div>
+          </div>
+
+          <DialogFooter className="gap-2">
+            <Button variant="outline" size="sm" className="rounded-full" onClick={() => setActivityExportOpen(false)}>Cancel</Button>
+            <Button size="sm" className="rounded-full" onClick={() => setActivityExportOpen(false)}>Create Report</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
