@@ -45,7 +45,7 @@ export function CoachTrackerContent() {
 
   // Summary stats
   const totalUsers = MOCK_USERS.filter((u) => u.role === "User").length;
-  const totalApplies = MOCK_USERS.filter((u) => u.role === "User").reduce((s, u) => s + u.jobAppliesCount, 0);
+  const totalApplies = 0;
   const totalCoaches = MOCK_COACHES.length;
 
   // Users for selected coach (mock: just show all users with applies > 0 as sample)
@@ -181,17 +181,8 @@ export function CoachTrackerContent() {
                         {`${u.firstName} ${u.lastName}`.trim() || <span className="italic text-muted-foreground">—</span>}
                       </TableCell>
                       <TableCell className="text-xs font-semibold text-center">
-                        <span
-                          className={cn(
-                            "inline-flex items-center justify-center w-8 h-5 rounded-sm text-xs font-semibold",
-                            u.jobAppliesCount === 0
-                              ? "text-muted-foreground"
-                              : u.jobAppliesCount >= 20
-                              ? "bg-green-100 text-green-700"
-                              : "bg-blue-50 text-blue-700"
-                          )}
-                        >
-                          {u.jobAppliesCount}
+                        <span className="inline-flex items-center justify-center w-8 h-5 rounded-sm text-xs font-semibold text-muted-foreground">
+                          —
                         </span>
                       </TableCell>
                     </TableRow>
