@@ -225,9 +225,7 @@ export default function UserOverviewPage() {
         }}
       >
         <Link href="/manage/users" style={mainActiveStyle}>Users</Link>
-        <span style={mainInactiveStyle}>Links</span>
-        <span style={mainInactiveStyle}>Reports</span>
-        <span style={mainInactiveStyle}>Tags</span>
+        <Link href="/manage/reports" style={mainInactiveStyle}>Reports</Link>
       </nav>
 
       {/* ── Content area ─────────────────────────────────────── */}
