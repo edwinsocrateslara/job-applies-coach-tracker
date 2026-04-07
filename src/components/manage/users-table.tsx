@@ -389,7 +389,7 @@ export function UsersTable() {
                 <span style={{ fontSize: "14px", fontWeight: 500, color: "#000000" }}>Breakdown by User</span>
               </label>
 
-              {/* All Applications Across Selected Users */}
+              {/* All Applications (Selected Users) */}
               <div style={{ opacity: selected.size >= 2 ? 1 : 0.45 }}>
                 <label
                   className="flex items-center gap-3"
@@ -404,11 +404,8 @@ export function UsersTable() {
                     disabled={selected.size < 2}
                     style={{ accentColor: "#6B11F9", flexShrink: 0 }}
                   />
-                  <span style={{ fontSize: "14px", fontWeight: 500, color: "#000000" }}>All Applications Across Selected Users</span>
+                  <span style={{ fontSize: "14px", fontWeight: 500, color: "#000000" }}>All Applications (Selected Users)</span>
                 </label>
-                {selected.size < 2 && (
-                  <span style={{ fontSize: "12px", color: "#8687A8", paddingLeft: "25px", display: "block", marginTop: "2px" }}>Select multiple users to enable</span>
-                )}
               </div>
             </div>
 

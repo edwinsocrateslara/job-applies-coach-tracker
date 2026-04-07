@@ -48,8 +48,8 @@ const TD: React.CSSProperties = {
 
 const reports = [
   { dateCreated: "April 7, 2026", name: "Q1 Cohort",            type: "Profile Data",                          users: 3 },
-  { dateCreated: "April 7, 2026", name: "Spring Applications",  type: "Application Activity — Individual",      users: 1 },
-  { dateCreated: "April 7, 2026", name: "Cross-Cohort Summary", type: "Application Activity — Aggregate",      users: 4 },
+  { dateCreated: "April 7, 2026", name: "Spring Applications",  type: "Application Activity — Breakdown by User",                  users: 1 },
+  { dateCreated: "April 7, 2026", name: "Cross-Cohort Summary", type: "Application Activity — All Applications (Selected Users)", users: 4 },
   { dateCreated: "April 6, 2026", name: "March Graduates",      type: "Profile Data",                          users: 1 },
   { dateCreated: "April 6, 2026", name: "BuildRight Cohort",    type: "Profile Data",                          users: 1 },
 ];
