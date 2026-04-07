@@ -256,7 +256,7 @@ export default function UserOverviewPage() {
           <span style={profileInactiveStyle}>Roadmap</span>
           <Link href={`/manage/users/${SLUG}/progress`} style={profileInactiveStyle}>Progress</Link>
           <span style={profileInactiveStyle}>Recommended</span>
-          <Link href={`/manage/users/${SLUG}/job-tracker`} style={profileInactiveStyle}>Job Tracker</Link>
+          <Link href={`/manage/users/${SLUG}/application-activity`} style={profileInactiveStyle}>Application Activity</Link>
         </nav>
 
         {/* ── Cards stack ──────────────────────────────────────── */}

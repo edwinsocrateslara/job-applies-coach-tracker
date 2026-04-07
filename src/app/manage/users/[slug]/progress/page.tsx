@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, Plus } from "lucide-react";
+import { ChevronLeft, Plus, Trash2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -19,7 +19,7 @@ const SLUG = "ed-socrates";
 const CARD_STYLE: React.CSSProperties = {
   background: "var(--color-card)",
   borderRadius: "4px",
-  padding: "24px",
+  padding: "16px 20px",
   boxShadow: "rgba(134, 135, 168, 0.1) 0px 4px 20px 0px",
 };
 
@@ -96,7 +96,7 @@ function LeftCard({
 }) {
   return (
     <div style={CARD_STYLE}>
-      <div className="flex items-start justify-between mb-4">
+      <div className="flex items-start justify-between mb-2">
         <h2 className="text-card-foreground" style={SECTION_HEADING}>{title}</h2>
         {/* Spec: + icon button, --muted-foreground */}
         <button
@@ -214,6 +214,78 @@ function ProfileSummaryCard() {
           <CircularProgress percent={66} />
         </div>
       </div>
+    </div>
+  );
+}
+
+// ─── Job Tracker data ─────────────────────────────────────────────────────────
+
+const JOB_LANES: { label: string; jobs: { title: string; company: string; location: string }[] }[] = [
+  {
+    label: "Saved",
+    jobs: [
+      { title: "Marketing Coordinator",  company: "Shopify",  location: "Ottawa, ON, Canada"    },
+      { title: "Operations Analyst",      company: "RBC",      location: "Toronto, ON, Canada"   },
+    ],
+  },
+  {
+    label: "Applied",
+    jobs: [
+      { title: "Customer Service Representative (02804) - 2504 N Water St", company: "Domino's", location: "Decatur, IL, USA"         },
+      { title: "Administrative Assistant", company: "TD Bank",  location: "Toronto, ON, Canada"   },
+      { title: "Data Entry Clerk",          company: "Telus",   location: "Vancouver, BC, Canada"  },
+    ],
+  },
+  {
+    label: "Interviewing",
+    jobs: [
+      { title: "Office Manager", company: "Bruce Telecom", location: "Owen Sound, ON, Canada" },
+    ],
+  },
+  {
+    label: "Hired",
+    jobs: [],
+  },
+];
+
+// ─── Job Card ─────────────────────────────────────────────────────────────────
+
+function JobCard({ title, company, location }: { title: string; company: string; location: string }) {
+  return (
+    <div
+      style={{
+        background: "#FFFFFF",
+        borderRadius: "6px",
+        padding: "12px 14px",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+        display: "flex",
+        flexDirection: "column",
+        gap: "2px",
+      }}
+    >
+      {/* Title row with trash icon */}
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "8px" }}>
+        <p style={{ fontSize: "13px", fontWeight: 600, color: "#000022", margin: 0, lineHeight: "1.4" }}>
+          {title}
+        </p>
+        <button
+          style={{ background: "transparent", border: "none", cursor: "pointer", padding: "0", flexShrink: 0, marginTop: "1px" }}
+          aria-label="Remove job"
+        >
+          <Trash2 style={{ width: "13px", height: "13px", color: "#8687A8" }} />
+        </button>
+      </div>
+      {/* Company */}
+      <p style={{ fontSize: "12px", fontWeight: 500, color: "#6B11F9", margin: 0 }}>{company}</p>
+      {/* Location */}
+      <p style={{ fontSize: "12px", fontWeight: 400, color: "#8687A8", margin: 0 }}>{location}</p>
+      {/* See more link */}
+      <a
+        href="#"
+        style={{ fontSize: "12px", fontWeight: 500, color: "#6B11F9", textDecoration: "none", marginTop: "6px", display: "inline-flex", alignItems: "center", gap: "2px" }}
+      >
+        See more ↗
+      </a>
     </div>
   );
 }
@@ -414,7 +486,7 @@ export default function UserProgressPage() {
           <span style={profileInactiveStyle}>Roadmap</span>
           <span style={profileActiveStyle}>Progress</span>
           <span style={profileInactiveStyle}>Recommended</span>
-          <Link href={`/manage/users/${SLUG}/job-tracker`} style={profileInactiveStyle}>Job Tracker</Link>
+          <Link href={`/manage/users/${SLUG}/application-activity`} style={profileInactiveStyle}>Application Activity</Link>
         </nav>
 
         {/* ── Two-column layout ────────────────────────────────── */}
@@ -423,36 +495,6 @@ export default function UserProgressPage() {
 
           {/* ── Left column ──────────────────────────────────── */}
           <div style={{ flex: "0 0 792px", maxWidth: "792px", display: "flex", flexDirection: "column", gap: "16px" }}>
-
-            {/* Job tracker section */}
-            <div>
-              <h2 style={{ fontSize: "30px", fontWeight: 700, color: "#000022", margin: "0 0 16px" }}>
-                Job tracker
-              </h2>
-              <div style={{ display: "flex", gap: "16px" }}>
-                {[
-                  { label: "Saved", count: 0 },
-                  { label: "Applied", count: 0 },
-                  { label: "Interviewing", count: 0 },
-                  { label: "Hired", count: 0 },
-                ].map(({ label, count }) => (
-                  <div
-                    key={label}
-                    style={{
-                      flex: 1,
-                      background: "#EFEFF7",
-                      borderRadius: "8px",
-                      padding: "16px 20px",
-                      minHeight: "450px",
-                    }}
-                  >
-                    <p style={{ fontSize: "18px", fontWeight: 600, color: "#000022", margin: 0 }}>
-                      {label}: {count}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
 
             {/* Services card */}
             <LeftCard title="Services" onAdd={() => setServiceModalOpen(true)}>
@@ -471,12 +513,12 @@ export default function UserProgressPage() {
             {/* Notes card */}
             <LeftCard title="Notes" onAdd={() => {}}>
               {/* Spec: textarea "Add a note...", Cancel (text), Add Note (primary pill) */}
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-2">
                 <textarea
                   value={noteText}
                   onChange={(e) => setNoteText(e.target.value)}
                   placeholder="Add a note..."
-                  rows={4}
+                  rows={3}
                   className="text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary/20"
                   style={{
                     width: "100%",
@@ -517,6 +559,37 @@ export default function UserProgressPage() {
                 </div>
               </div>
             </LeftCard>
+
+            {/* Job tracker section */}
+            <div>
+              <h2 style={{ fontSize: "30px", fontWeight: 700, color: "#000022", margin: "0 0 16px" }}>
+                Job tracker
+              </h2>
+              <div style={{ display: "flex", gap: "16px" }}>
+                {JOB_LANES.map((lane) => (
+                  <div
+                    key={lane.label}
+                    style={{
+                      flex: 1,
+                      background: "#EFEFF7",
+                      borderRadius: "8px",
+                      padding: "16px 14px",
+                      minHeight: "450px",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "10px",
+                    }}
+                  >
+                    <p style={{ fontSize: "15px", fontWeight: 600, color: "#000022", margin: "0 0 4px", paddingLeft: "6px" }}>
+                      {lane.label}: {lane.jobs.length}
+                    </p>
+                    {lane.jobs.map((job, i) => (
+                      <JobCard key={i} title={job.title} company={job.company} location={job.location} />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* ── Right column — sticky profile summary ─────────── */}

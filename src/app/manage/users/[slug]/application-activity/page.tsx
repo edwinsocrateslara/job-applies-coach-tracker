@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronLeft, Pencil } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 const SLUG = "ed-socrates";
 
@@ -50,15 +50,16 @@ const profileInactiveStyle: React.CSSProperties = {
   cursor: "default",
 };
 
-// ─── Activity log data ────────────────────────────────────────────────────────
+// ─── Application activity data ────────────────────────────────────────────────
+// 3 entries within the last hour, 3 spread across recent days
 
 const activityLog = [
-  { jobTitle: "Office Administrator",       employer: "County of Bruce",  status: "Applied", date: "Apr 1, 2025"  },
-  { jobTitle: "Administrative Coordinator", employer: "Saugeen Shores",   status: "Applied", date: "Mar 28, 2025" },
-  { jobTitle: "Receptionist",               employer: "Grey Bruce Health", status: "Applied", date: "Mar 22, 2025" },
-  { jobTitle: "Data Entry Clerk",            employer: "Telus",            status: "Applied", date: "Mar 20, 2025" },
-  { jobTitle: "Office Manager",             employer: "Bruce Telecom",     status: "Applied", date: "Mar 18, 2025" },
-  { jobTitle: "Administrative Assistant",   employer: "TD Bank",           status: "Applied", date: "Mar 15, 2025" },
+  { jobTitle: "Office Administrator",       employer: "County of Bruce",  status: "Applied", date: "1 hour ago"  },
+  { jobTitle: "Administrative Coordinator", employer: "Saugeen Shores",   status: "Applied", date: "2 hours ago" },
+  { jobTitle: "Receptionist",               employer: "Grey Bruce Health", status: "Applied", date: "5 hours ago" },
+  { jobTitle: "Data Entry Clerk",           employer: "Telus",             status: "Applied", date: "2 days ago"  },
+  { jobTitle: "Office Manager",             employer: "Bruce Telecom",     status: "Applied", date: "4 days ago"  },
+  { jobTitle: "Administrative Assistant",   employer: "TD Bank",           status: "Applied", date: "6 days ago"  },
 ];
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
@@ -105,14 +106,13 @@ export default function UserJobTrackerPage() {
           <span style={profileInactiveStyle}>Roadmap</span>
           <Link href={`/manage/users/${SLUG}/progress`} style={profileInactiveStyle}>Progress</Link>
           <span style={profileInactiveStyle}>Recommended</span>
-          <span style={profileActiveStyle}>Job Tracker</span>
+          <span style={profileActiveStyle}>Application Activity</span>
         </nav>
 
-        {/* ── Activity log card ─────────────────────────────────── */}
+        {/* ── Application Activity card — full width ─────────────── */}
         <div
           style={{
             width: "100%",
-            maxWidth: "792px",
             background: "var(--color-card)",
             borderRadius: "4px",
             padding: "24px",
@@ -124,7 +124,7 @@ export default function UserJobTrackerPage() {
             className="text-card-foreground"
             style={{ fontSize: "24px", fontWeight: 500, margin: "0 0 20px" }}
           >
-            Activity log
+            Application Activity
           </h2>
 
           {/* Table */}
@@ -159,10 +159,9 @@ export default function UserJobTrackerPage() {
                         : "none",
                   }}
                 >
-                  {/* Job title — primary color link with pencil icon */}
+                  {/* Job title — primary color, no icon */}
                   <td style={{ padding: "16px 24px 16px 0" }}>
                     <span
-                      className="flex items-center gap-1"
                       style={{
                         color: "var(--color-primary)",
                         fontSize: "14px",
@@ -171,7 +170,6 @@ export default function UserJobTrackerPage() {
                       }}
                     >
                       {row.jobTitle}
-                      <Pencil style={{ width: "12px", height: "12px", flexShrink: 0 }} />
                     </span>
                   </td>
                   {/* Employer */}

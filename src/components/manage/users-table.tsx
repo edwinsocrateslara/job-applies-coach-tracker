@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronDown, Plus, Tag, Users, MoreHorizontal, Trash2, X, FileDown } from "lucide-react";
+import { ChevronDown, Tag, Users, FileDown } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
@@ -56,8 +56,6 @@ export function UsersTable() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [sortKey, setSortKey] = useState<SortKey>("dateCreated");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
-  const [deleteOpen, setDeleteOpen] = useState(false);
-  const [removeCoachOpen, setRemoveCoachOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
 
   const sorted = [...MOCK_USERS].sort((a, b) => {
@@ -120,26 +118,9 @@ export function UsersTable() {
         </span>
 
         <button
-          className="flex items-center gap-1.5 hover:opacity-80 transition-opacity"
-          style={{
-            background: "transparent",
-            color: "#000000",
-            border: "1px solid #000000",
-            borderRadius: "9999px",
-            fontSize: "14px",
-            fontWeight: 500,
-            padding: "8px 16px",
-            cursor: "pointer",
-          }}
-        >
-          <Plus style={{ width: "14px", height: "14px" }} />
-          Invite coach
-        </button>
-
-        <button
           disabled
           className="flex items-center gap-1.5"
-          style={{ color: "#576B85", fontSize: "14px", cursor: "default", opacity: 0.6 }}
+          style={{ color: "#000022", fontSize: "14px", cursor: "default", opacity: 0.6 }}
         >
           <Tag style={{ width: "14px", height: "14px" }} />
           Assign tag
@@ -148,7 +129,7 @@ export function UsersTable() {
         <button
           disabled
           className="flex items-center gap-1.5"
-          style={{ color: "#576B85", fontSize: "14px", cursor: "default", opacity: 0.6 }}
+          style={{ color: "#000022", fontSize: "14px", cursor: "default", opacity: 0.6 }}
         >
           <Users style={{ width: "14px", height: "14px" }} />
           Manage coach
@@ -162,23 +143,12 @@ export function UsersTable() {
             More
             <ChevronDown style={{ width: "14px", height: "14px" }} />
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
+          <DropdownMenuContent align="start" style={{ minWidth: "260px" }}>
             <DropdownMenuItem className="text-sm gap-2" onClick={() => setExportOpen(true)}>
-              <FileDown className="w-3.5 h-3.5" /> Export
+              <FileDown className="w-3.5 h-3.5" /> Export Profile Data
             </DropdownMenuItem>
-            <DropdownMenuItem
-              className="text-sm gap-2 text-destructive"
-              disabled={!someSelected}
-              onClick={() => setDeleteOpen(true)}
-            >
-              <Trash2 className="w-3.5 h-3.5" /> Delete selected
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="text-sm gap-2"
-              disabled={!someSelected}
-              onClick={() => setRemoveCoachOpen(true)}
-            >
-              <X className="w-3.5 h-3.5" /> Remove coach assignment
+            <DropdownMenuItem className="text-sm gap-2" onClick={() => setExportOpen(true)}>
+              <FileDown className="w-3.5 h-3.5" /> Export Application Activity
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -223,7 +193,6 @@ export function UsersTable() {
               <th style={{ ...TH, cursor: "pointer" }} onClick={() => handleSort("role")}>
                 Role <SortIcon col="role" />
               </th>
-              <th style={TH}>Coach</th>
               <th style={TH}>
                 Email <ChevronDown style={{ width: "12px", height: "12px", marginLeft: "4px", display: "inline", opacity: 0.4 }} />
               </th>
@@ -302,30 +271,7 @@ export function UsersTable() {
                       onClick={(e) => e.stopPropagation()}
                     >
                       {user.role}
-                      <ChevronDown style={{ width: "11px", height: "11px", opacity: 0.7 }} />
                     </span>
-                  </td>
-
-                  {/* Coach — + button, filled/purple if already a Coach */}
-                  <td style={TD}>
-                    <button
-                      onClick={(e) => e.stopPropagation()}
-                      style={{
-                        width: "28px",
-                        height: "28px",
-                        borderRadius: "9999px",
-                        border: user.role === "Coach" ? "none" : "1px solid #C9CBE3",
-                        background: user.role === "Coach" ? "#6B11F9" : "transparent",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        cursor: "pointer",
-                        flexShrink: 0,
-                      }}
-                      title={user.role === "Coach" ? "Already a coach" : "Designate as coach"}
-                    >
-                      <Plus style={{ width: "12px", height: "12px", color: user.role === "Coach" ? "#ffffff" : "#8687A8" }} />
-                    </button>
                   </td>
 
                   {/* Email */}
@@ -366,33 +312,6 @@ export function UsersTable() {
           </tbody>
         </table>
       </div>
-
-      {/* ── Delete Modal ──────────────────────────────────────── */}
-      <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <DialogContent className="sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle>Delete {selected.size} users?</DialogTitle>
-          </DialogHeader>
-          <p className="text-sm" style={{ color: "#576B85" }}>This action cannot be undone.</p>
-          <DialogFooter className="gap-2">
-            <Button variant="outline" size="sm" onClick={() => setDeleteOpen(false)}>Cancel</Button>
-            <Button variant="destructive" size="sm" onClick={() => { setSelected(new Set()); setDeleteOpen(false); }}>Delete</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* ── Remove Coach Modal ────────────────────────────────── */}
-      <Dialog open={removeCoachOpen} onOpenChange={setRemoveCoachOpen}>
-        <DialogContent className="sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle>Remove Coach assignment from {selected.size} users?</DialogTitle>
-          </DialogHeader>
-          <DialogFooter className="gap-2">
-            <Button variant="outline" size="sm" onClick={() => setRemoveCoachOpen(false)}>Cancel</Button>
-            <Button size="sm" onClick={() => setRemoveCoachOpen(false)}>Confirm</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       {/* ── Export Modal ──────────────────────────────────────── */}
       <Dialog open={exportOpen} onOpenChange={setExportOpen}>

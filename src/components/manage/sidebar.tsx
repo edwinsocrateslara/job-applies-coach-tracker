@@ -70,7 +70,7 @@ export function Sidebar() {
         {navItems.map((item) => {
           const isManage = item.href === "/manage/users";
           const active = isManage
-            ? pathname.startsWith("/manage/users") || pathname.startsWith("/manage/coach-tracker") || pathname === "/manage"
+            ? pathname.startsWith("/manage/users") || pathname === "/manage"
             : pathname.startsWith(item.href);
 
           return (

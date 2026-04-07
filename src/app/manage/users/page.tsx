@@ -65,9 +65,7 @@ export default function UsersPage() {
         style={{ padding: "0 32px", borderBottom: "1px solid #C9CBE3" }}
       >
         <Link href="/manage/users" style={activeStyle}>Users</Link>
-        <Link href="/manage/links" style={inactiveStyle}>Links</Link>
         <Link href="/manage/reports" style={inactiveStyle}>Reports</Link>
-        <Link href="/manage/tags" style={inactiveStyle}>Tags</Link>
       </nav>
 
       {/* ── Search + filter section ──────────────────────────────── */}
